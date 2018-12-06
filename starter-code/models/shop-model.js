@@ -78,11 +78,15 @@ const shopSchema = new Schema(
     },
     timeframe: {
       type: String,
-      enum: ["quicke and easy", "time to chat", "be patient"],
+      enum: ["quick and easy", "time to chat", "be patient"],
     },
     display_phone: {
       type: String
-    }
+    },
+    price_level: {
+      type: String,
+      enum: ["€", "€€", "€€€"],
+    },
   },
   {
     timestamps: true,
