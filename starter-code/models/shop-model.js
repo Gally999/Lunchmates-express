@@ -6,9 +6,9 @@ const shopSchema = new Schema({
   // document structure & rules defines here
 
 
-  
+
 }, {
-  timestamps: true;
+  timestamps: true,
 });
 
 const Shop = mongoose.model("Shop", shopSchema);
