@@ -12,7 +12,7 @@ const userSchema = new Schema(
       required: true
     },
     email: {
-      type: string,
+      type: String,
       required: true,
       unique: true,
       match: /^.+@.+\..+$/

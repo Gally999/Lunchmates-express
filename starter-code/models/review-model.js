@@ -15,7 +15,7 @@ shopId : {
       required: true,
 },
 date: {
-  type: date,
+  type: Date,
 },
 rating: {
   type: Number,
@@ -28,20 +28,21 @@ comment: {
   required: true,
 },
 cuisine: {
-  type: Array,
+  type: [String],
   required: true,
   enum: ["American", "British", "Chinese", "French", "Greek", "Burgers", "Indian", "Italian", "Pizza", "Japanese", "Mexican", "Moroccan", "Spanish", "Thaï", "Lebanese", "Turkish", "Vietnamese", "Healthy", "Portuguese", "Gourmet", "German"],
 },
 diet: {
-  type: Array,
-  enum: ["vegan", "veggie", "gluten free", "paleo"],
+  type: [String],
+  enum: ["Vegan", "Veggie", "Gluten free", "Paleo", "Dairy-free"],
   required: true
 },
 types: {
-  type: Array
+  type: [String],
+  enum: ["Take away", "Sit-in"],
 },
 timeframe: {
-  type: Array,
+  type: String,
   enum: ["quicke and easy", "time to chat", "be patient"],
 },
 }, {
