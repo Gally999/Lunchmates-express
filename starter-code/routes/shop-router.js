@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/shop", (req, res, next) => {
   const dataToken = process.env.YELP_TOKEN;
 // if the user is not logged-in then we search for the best rated places in Paris
-  axios.get(`https://api.yelp.com/v3/businesses/search?limit=30&location=paris&sort_by=rating`, { headers: { "Authorization": `Bearer ${dataToken}` } })
+  axios.get(`https://api.yelp.com/v3/businesses/search?limit=30&term=food&location=paris&sort_by=rating`, { headers: { "Authorization": `Bearer ${dataToken}` } })
       .then(response => {
         console.log(response.data);
         res.json(response.data);
@@ -35,13 +35,13 @@ router.get("/shop", (req, res, next) => {
 
 // GET "/shop/searchTerm" -- Retrieves the list of restaurants filtered by the user input (<RestaurantsList)
 router.get("/shop/:searchTerm", (req, res, next) => {
-  console.log("req.params", req.params);
+  console.log("req.params de searchTerm", req.params);
   const dataToken = process.env.YELP_TOKEN;
   const { searchTerm } = req.params; // ou possible de recup de req.query
   axios.get(`https://api.yelp.com/v3/businesses/search?location=paris&term=${searchTerm}&limit=50`, { headers: { "Authorization": `Bearer ${dataToken}` } })
     .then(response => {
       //console.log(response.data);
-      res.json(response.data)
+      res.json(response.data);
     })
     .catch(err => next(err));
 })
@@ -55,8 +55,19 @@ router.get("/shop/:searchTerm", (req, res, next) => {
 
 // GET "/shop/:shopId" -- Retrieves the details of ONE restaurant
 
-// GET "/shop/:userId" -- Retrieves the favorite restaurants of the userId
 
+// GET "/shop/:userId" -- Retrieves the favorite restaurants of the userId
+router.get("/shop/:shopId", (req, res, next) => {
+  console.log("req.params de shopId", req.params);
+  const dataToken = process.env.YELP_TOKEN;
+  const { shopId } = req.params;
+  axios.get(`https://api.yelp.com/v3/businesses/${shopId}`, { headers: { "Authorization": `Bearer ${dataToken}` } })
+    .then(response => {
+      console.log(response.data);
+      res.json(response.data);
+    })
+    .catch(err => next(err));
+  });
 
 
 
