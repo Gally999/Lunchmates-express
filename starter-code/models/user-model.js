@@ -21,11 +21,11 @@ const userSchema = new Schema(
     avatar: {
       type: String
     },
-    companyId: {
-      type: Schema.Types.ObjectId,
-      ref: "Company",
-      required: true
-    },
+    // companyId: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "Company",
+    //   required: true
+    // },
     favorites: {
       type: Array
     },
