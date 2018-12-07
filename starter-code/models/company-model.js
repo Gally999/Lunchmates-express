@@ -24,11 +24,6 @@ const companySchema = new Schema(
       },
       required: true
     },
-    employeesID: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true
-    }
   },
   {
     timestamps: true
