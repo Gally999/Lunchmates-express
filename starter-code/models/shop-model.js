@@ -12,7 +12,7 @@ const shopSchema = new Schema(
       type: String,
       required: true
     },
-    display: {
+    display_address: {
       type: Array,
       required: true
     },
