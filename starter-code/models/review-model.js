@@ -43,7 +43,11 @@ types: {
 },
 timeframe: {
   type: String,
-  enum: ["quicke and easy", "time to chat", "be patient"],
+  enum: ["quick and easy", "time to chat", "be patient"],
+},
+price_level: {
+  type: String,
+  enum: ["€", "€€", "€€€"],
 },
 }, {
   // additional settings for the Schema class
