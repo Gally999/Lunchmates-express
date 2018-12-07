@@ -1,10 +1,23 @@
 const express = require("express");
+const axios = require("axios");
 
 const Shop = require("../models/shop-model.js")
 
 const router = express.Router();
 
 // GET "/resto" -- Retrieves the list of resto sorted by closest distance
+router.get("/resto/:searchTerm", (req, res, next) => {
+  console.log("req.params", req.params);
+  const dataToken = process.env.YELP_TOKEN;
+  const { searchTerm } = req.params; // ou possible de recup de req.query
+  axios.get(`https://api.yelp.com/v3/businesses/search?location=paris&term=${searchTerm}&limit=50`, { headers: { "Authorization": `Bearer ${dataToken}` } })
+    .then(response => {
+      //console.log(response.data);
+      res.json(response.data)
+    })
+    .catch(err => next(err));
+})
+
 
 // GET "/resto/workmates" -- Retrieves the list of restaurants in the coworkers' favorites
 
