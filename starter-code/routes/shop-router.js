@@ -54,10 +54,7 @@ router.get("/shop/:searchTerm", (req, res, next) => {
 // GET "/shop/area/query?=xxx" -- Retrieves the list of restaurants in the area (coordinates) filtered by the user input 
 
 // GET "/shop/:shopId" -- Retrieves the details of ONE restaurant
-
-
-// GET "/shop/:userId" -- Retrieves the favorite restaurants of the userId
-router.get("/shop/:shopId", (req, res, next) => {
+router.get("/shop-details/:shopId", (req, res, next) => {
   console.log("req.params de shopId", req.params);
   const dataToken = process.env.YELP_TOKEN;
   const { shopId } = req.params;
@@ -69,13 +66,10 @@ router.get("/shop/:shopId", (req, res, next) => {
     .catch(err => next(err));
   });
 
+// GET "/shop/:userId" -- Retrieves the favorite restaurants of the userId
 
 
 // **** maybe feature POST /shop -- Adds a new restaurant
-
-
-
-
 
 
 module.exports = router;
