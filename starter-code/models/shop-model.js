@@ -13,9 +13,19 @@ const shopSchema = new Schema(
       type: String,
       required: true
     },
-    display_address: {
-      type: Array,
-      required: true
+    location: {
+      address1: "34 rue des Rosiers",
+      address2: "",
+      address3: "",
+      city: "Paris",
+      zip_code: "75004",
+      country: "FR",
+      state: "75",
+      display_address: [
+          "34 rue des Rosiers",
+          "75004 Paris",
+          "France"
+      ]
     },
     coordinates: {
       latitude: {
@@ -67,7 +77,7 @@ const shopSchema = new Schema(
       type: [String],
       enum: ["Take away", "Sit-in"],
     },
-    photo: {
+    image_url: {
       type: String,
       required: true
     },
@@ -83,7 +93,11 @@ const shopSchema = new Schema(
       enum: ["€", "€€", "€€€", "€€€€"],
     },
     yelpReviewCount: {
-      type: Number
+      type: Number,
+    }, 
+    alias: {
+      type: String,
+      required: true,
     }
   },
   {

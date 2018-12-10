@@ -57,7 +57,7 @@ router.delete("/logout", (req, res, next) => {
 // GET /checkuser
 router.get("/checkuser", (req, res, next) => {
   if(req.user) {
-    console.log("check user requser", req.user);
+    //console.log("checkuser req.user", req.user);
     req.user.encryptedPassword = undefined;
     res.json({ userDoc: req.user });
   } else {

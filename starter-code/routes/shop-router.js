@@ -78,6 +78,23 @@ router.get("/shop-details/:shopId", (req, res, next) => {
 
 // GET "/shop/:userId" -- Retrieves the favorite restaurants of the userId
 
+// GET "/user-favorites" -- Retrieves the favorites of the logged-in user
+router.get("/user-favorites", (req, res, next) => {
+  const userId = req.user._id;
+  User.findById(userId)
+    .populate("favorites")
+    .then(userDoc => {
+      console.log("userDoc.favorites", userDoc);
+      res.json(userDoc)
+      // return Shop.find({_id: {$eq: userDoc.favorites} })
+      // .populate("")
+      // .then()
+      // .catch();
+    })
+    .catch(err => next(err));
+})
+
+
 // PUT "/add-shop" -- Add the restaurant to the list of favorites of the user
 router.put("/add-shop/:shopId", (req, res, next) => {
   //let ourShopId;
@@ -97,18 +114,22 @@ router.put("/add-shop/:shopId", (req, res, next) => {
         rating,
         location,
         coordinates,
-        price
+        price, 
+        alias
       } = response.data;
+      // We create a copy of the API in our local database
+      // --> Need to check first that it's not already in the database
       Shop.create({
         yelpId: id,
         name: name,
-        display_address: location.display_address,
+        location: location,
         coordinates: coordinates,
         price_level: price, 
         yelpRating: rating, 
-        photo: image_url, 
+        image_url: image_url, 
         display_phone: display_phone,
         yelpReviewCount: review_count,
+        alias: alias,
       })
       .then(shopDoc => {
         const userId = req.user._id;
