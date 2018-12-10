@@ -15,6 +15,7 @@ router.post("/signup", (req, res, next) => {
   User.create({ firstName, lastName, email, encryptedPassword, companyId })
   .then(userDoc => {
     req.logIn(userDoc, () => {
+      console.log(req.user);
       userDoc.encryptedPassword = undefined;
       res.json({ userDoc });
     });
@@ -28,6 +29,7 @@ router.post("/login", (req, res, next) => {
 
   User.findOne({ email: { $eq: email }})
   .then(userDoc => {
+    console.log("req.user login", req.user);
     if(!userDoc) {
       next(new Error ("Incorrect email."));
       return;
@@ -55,6 +57,7 @@ router.delete("/logout", (req, res, next) => {
 // GET /checkuser
 router.get("/checkuser", (req, res, next) => {
   if(req.user) {
+    console.log("check user requser", req.user);
     req.user.encryptedPassword = undefined;
     res.json({ userDoc: req.user });
   } else {

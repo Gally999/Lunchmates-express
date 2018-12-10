@@ -27,7 +27,12 @@ const userSchema = new Schema(
       required: true
     },
     favorites: {
-      type: Array
+      type: [
+        {
+          type: Schema.Types.ObjectId, 
+          ref: "Shop"
+        }
+      ]
     },
   },
   {

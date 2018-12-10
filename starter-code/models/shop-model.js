@@ -7,6 +7,7 @@ const shopSchema = new Schema(
     // document structure & rules defines here
     yelpId: {
       type: String,
+      unique: true,
     },
     name: {
       type: String,
@@ -26,19 +27,14 @@ const shopSchema = new Schema(
         required: true,
       }
     },
-    price_level: {
+    yelpRating: {
       type: Number,
       required: true,
-      max: 3
-    },
-    rating: {
-      type: Number,
-      required: true,
+      min: 0,
       max: 5
     },
     cuisine: {
       type: [String],
-      required: true,
       enum: [
         "American",
         "British",
@@ -66,7 +62,6 @@ const shopSchema = new Schema(
     diet: {
       type: [String],
       enum: ["Vegan", "Veggie", "Gluten free", "Paleo", "Dairy-free"],
-      required: true
     },
     types: {
       type: [String],
@@ -85,8 +80,11 @@ const shopSchema = new Schema(
     },
     price_level: {
       type: String,
-      enum: ["€", "€€", "€€€"],
+      enum: ["€", "€€", "€€€", "€€€€"],
     },
+    yelpReviewCount: {
+      type: Number
+    }
   },
   {
     timestamps: true,

@@ -14,7 +14,7 @@ passport.serializeUser((userDoc, done) => {
 // deserializeUser(): defines how to retrieve the user information from the DB
 // (happens automatically on EVERY request AFTER you log in)
 passport.deserializeUser((userId, done) => {
-  console.log("DESERIALIZE (retrieve user info from the database, yay!");
+  console.log("DESERIALIZE (retrieve user info from the database, yay!)");
 
   User.findById(userId)
     .then(userDoc => {
