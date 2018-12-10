@@ -7,12 +7,12 @@ const router = express.Router();
 
 // POST "/signup"
 router.post("/signup", (req, res, next) => {
-  const { firstName, lastName, email, originalPassword } = req.body;
-  console.log(firstName, lastName, email, originalPassword)
+  const { firstName, lastName, email, originalPassword, companyId } = req.body;
+  console.log(firstName, lastName, email, originalPassword, companyId)
 
   const encryptedPassword = bcrypt.hashSync(originalPassword, 10);
 
-  User.create({ firstName, lastName, email, encryptedPassword })
+  User.create({ firstName, lastName, email, encryptedPassword, companyId })
   .then(userDoc => {
     req.logIn(userDoc, () => {
       userDoc.encryptedPassword = undefined;

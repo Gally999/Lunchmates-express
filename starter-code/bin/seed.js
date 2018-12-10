@@ -16,6 +16,8 @@ mongoose
 
   const companiesData = [
     {name: "Ironhack", subOffice: "Paris"},
+    {name: "Unicorn", subOffice: "Glitter"},
+    {name:"Unicorn", subOffice: "Sparkle"},
   ];
 
 
