@@ -13,22 +13,18 @@ const companySchema = new Schema(
       type: String,
       required: true
     },
-    // coordinates: {
-    //   location: {
-    //     lat: {
-    //       type: String
-    //     },
-    //     lng: {
-    //       type: String
-    //     }
-    //   },
-    //   required: true
-    // },
+    addressCoordinates: {
+      type: { type: String, default: "Point" },
+      string: { type: String, required: true, },
+      coordinates: [{ type: Number, required: true, }],
+    },
   },
   {
     timestamps: true
   }
 );
+
+companySchema.index({ addressCoordinates: "2dsphere" });
 
 const Company = mongoose.model("Company", companySchema);
 

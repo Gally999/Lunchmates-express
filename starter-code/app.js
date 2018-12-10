@@ -53,7 +53,7 @@ const authRouter = require("./routes/auth-router.js");
 app.use("/api", authRouter);
 
 const companiesRouter = require("./routes/companies-router.js");
-app.use("/api", companiesRouter);
+app.use('/api', companiesRouter);
 
 
 module.exports = app;
