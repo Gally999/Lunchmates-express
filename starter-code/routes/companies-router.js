@@ -11,4 +11,26 @@ router.get("/companies", (req, res, next) => {
     .catch(err => next(err));
 });
 
+// POST - create a company
+router.post("/add-company", (req, res, next) => {
+  const { companyName: name, subOffice, address: string, longitude, latitude  } = req.body;
+  //console.log( companyName, subOffice, string, latLng)
+
+  Company.create(
+    {
+      name, 
+      subOffice, 
+      addressCoordinates:
+        {
+        string: string,
+        coordinates: [longitude, latitude] 
+      }
+    }
+  )
+  .then(companyDoc => {
+      res.json({ companyDoc });
+    })
+  .catch(err => next(err));
+});
+
 module.exports = router;
