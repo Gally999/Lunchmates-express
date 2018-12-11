@@ -47,7 +47,7 @@ timeframe: {
 },
 price_level: {
   type: String,
-  enum: ["€", "€€", "€€€"],
+  enum: ["€", "€€", "€€€", "€€€€"],
 },
 }, {
   // additional settings for the Schema class
