@@ -14,18 +14,14 @@ const shopSchema = new Schema(
       required: true
     },
     location: {
-      address1: "34 rue des Rosiers",
-      address2: "",
-      address3: "",
-      city: "Paris",
-      zip_code: "75004",
-      country: "FR",
-      state: "75",
-      display_address: [
-          "34 rue des Rosiers",
-          "75004 Paris",
-          "France"
-      ]
+      address1: String,
+      address2: String,
+      address3: String,
+      city: String,
+      zip_code: String,
+      country: String,
+      state: String,
+      display_address: [String],
     },
     coordinates: {
       latitude: {
