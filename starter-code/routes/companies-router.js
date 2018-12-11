@@ -1,6 +1,7 @@
 const express = require("express");
 
 const Company = require("../models/company-model.js");
+const User = require("../models/user-model.js");
 
 const router = express.Router();
 
@@ -34,13 +35,13 @@ router.post("/add-company", (req, res, next) => {
 });
 
 // GET "/user-company" -- Retrieves the company info of the logged-in user
-router.get("/user-favorites", (req, res, next) => {
+router.get("/user-company", (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
-    .populate("Company")
+    .populate("companyId")
     .then(userDoc => {
-      console.log("userDoc.company", userDoc);
-      res.json(userDoc)
+      console.log("userDoc.company", userDoc.companyId);
+      res.json(userDoc.companyId)
       // return Shop.find({_id: {$eq: userDoc.favorites} })
       // .populate("")
       // .then()
