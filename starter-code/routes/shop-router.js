@@ -70,8 +70,8 @@ router.get("/shop-details/:shopId", (req, res, next) => {
       headers: { Authorization: `Bearer ${dataToken}` }
     })
     .then(response => {
-      console.log(response.data);
-      res.json(response.data);
+      //console.log(response.data);
+      res.json({ shop: response.data, user: req.user});
     })
     .catch(err => next(err));
 });
@@ -84,7 +84,7 @@ router.get("/user-favorites", (req, res, next) => {
   User.findById(userId)
     .populate("favorites")
     .then(userDoc => {
-      console.log("userDoc.favorites", userDoc);
+      //console.log("userDoc.favorites", userDoc);
       res.json(userDoc)
       // return Shop.find({_id: {$eq: userDoc.favorites} })
       // .populate("")
@@ -97,7 +97,7 @@ router.get("/user-favorites", (req, res, next) => {
 
 // PUT "/add-shop" -- Add the restaurant to the list of favorites of the user
 router.put("/add-shop/:shopId", (req, res, next) => {
-  //let ourShopId;
+  
   const { shopId } = req.params;
   const dataToken = process.env.YELP_TOKEN;
   axios
@@ -118,34 +118,75 @@ router.put("/add-shop/:shopId", (req, res, next) => {
         alias
       } = response.data;
       // We create a copy of the API in our local database
-      // --> Need to check first that it's not already in the database
-      Shop.create({
-        yelpId: id,
-        name: name,
-        location: location,
-        coordinates: coordinates,
-        price_level: price, 
-        yelpRating: rating, 
-        image_url: image_url, 
-        display_phone: display_phone,
-        yelpReviewCount: review_count,
-        alias: alias,
-      })
+      Shop.findOne({ yelpId: {$eq: id }} )
       .then(shopDoc => {
-        const userId = req.user._id;
-        const ourShopId = shopDoc._id; 
-        return User.findByIdAndUpdate(
-          userId,
-          { $push: { favorites: ourShopId } },
-          { runValidators: true, new: true }
-        )
-          .then(userDoc => res.json(userDoc))
+        console.log("whatever", shopDoc);
+        // Check if shop already exists in our local database
+        if (!shopDoc) {
+          // If the shop doesn't exist, we create it
+          Shop.create({
+            yelpId: id,
+            name: name,
+            location: location,
+            coordinates: coordinates,
+            price_level: price, 
+            yelpRating: rating, 
+            image_url: image_url, 
+            display_phone: display_phone,
+            yelpReviewCount: review_count,
+            alias: alias,
+          })
+          .then(createdShopDoc => {
+            const userId = req.user._id;
+            const ourShopId = createdShopDoc._id;
+            // Once created, we get the local db id and add it to the list of favorites of our user. 
+            return User.findByIdAndUpdate(
+              userId,
+              { $push: { favorites: ourShopId } },
+              { runValidators: true, new: true }
+            )
+            // then we send the userDoc to our front end 
+              .then(userDoc => res.json(userDoc))
+              .catch(err => {
+                console.log("1");
+                next(err);
+              })
+          })
+          .catch(err => {
+            console.log("2");
+            next(err);
+          })
+          // If the favored shop does already exist in our database, we get the id from our local db
+        } else {
+          const userId = req.user._id;
+          const localShopId = shopDoc._id;
+        // We check if the user already has this restaurant in their favorites
+          return User.findById(userId)
+          .then(userDoc => {
+            // If they don't already have it as a favorite, then we push it to the favorites array
+            if (userDoc.favorites.indexOf(localShopId) === -1) {
+              console.log("findUser and check if localShopId is included", userDoc.favorites.indexOf(localShopId) === -1, localShopId, userDoc.favorites);
+              User.findByIdAndUpdate(
+                userId, 
+                { $push: { favorites: localShopId } }, 
+                { runValidators: true, new: true},
+              )
+                .then(userDoc => res.json(userDoc))
+                .catch(err => next(err));
+            }
+          })
           .catch(err => next(err));
+        }
       })
-      .catch(err => next(err));
+      .catch(err => {
+        console.log("3");
+        next(err);
+      })
     })
-    .catch(err => next(err));
-  
+    .catch(err => {
+      console.log("4");
+      next(err);
+    })
 });
 
 // **** maybe feature POST /shop -- Adds a new restaurant
