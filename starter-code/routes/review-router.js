@@ -13,13 +13,12 @@ router.get("/reviews", (req, res, next) => {
 });
 
 // POST "/review" -- Adds a new review
-router.post("/reviews", (req, res, next) => {
+router.post("/add-review", (req, res, next) => {
   const { shopId } = req.params;
   const userId = req.user._id;
   const { userId, rating, comment, cuisine, diet, types, timeframe } = req.body;
 
   Review.create({
-    userId,
     shopId,
     userId,
     rating,
@@ -27,7 +26,8 @@ router.post("/reviews", (req, res, next) => {
     cuisine,
     diet,
     types,
-    timeframe
+    timeframe,
+    price_level,
   })
     .then(reviewDoc => res.json(reviewDoc))
     .catch(err => next(err));
