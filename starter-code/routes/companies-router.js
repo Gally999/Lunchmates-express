@@ -33,4 +33,19 @@ router.post("/add-company", (req, res, next) => {
   .catch(err => next(err));
 });
 
+// GET "/user-company" -- Retrieves the company info of the logged-in user
+router.get("/user-favorites", (req, res, next) => {
+  const userId = req.user._id;
+  User.findById(userId)
+    .populate("Company")
+    .then(userDoc => {
+      console.log("userDoc.company", userDoc);
+      res.json(userDoc)
+      // return Shop.find({_id: {$eq: userDoc.favorites} })
+      // .populate("")
+      // .then()
+      // .catch();
+    })
+    .catch(err => next(err));
+})
 module.exports = router;
