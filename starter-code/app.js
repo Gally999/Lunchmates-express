@@ -55,5 +55,7 @@ app.use("/api", authRouter);
 const companiesRouter = require("./routes/companies-router.js");
 app.use('/api', companiesRouter);
 
+const reviewsRouter = require("./routes/review-router.js");
+app.use("/api", reviewsRouter);
 
 module.exports = app;
