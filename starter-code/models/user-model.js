@@ -26,6 +26,9 @@ const userSchema = new Schema(
       ref: "Company",
       required: true
     },
+    yelpFavorites: {
+      type: [String], 
+    },
     favorites: {
       type: [
         {

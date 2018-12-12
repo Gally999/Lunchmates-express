@@ -49,7 +49,7 @@ router.get("/shop/:searchTerm", (req, res, next) => {
     )
     .then(response => {
       //console.log(response.data);
-      res.json(response.data);
+      res.json({ shop: response.data, user: req.user });
     })
     .catch(err => next(err));
 });
@@ -126,23 +126,24 @@ router.put("/add-shop/:shopId", (req, res, next) => {
           // If the shop doesn't exist, we create it
           Shop.create({
             yelpId: id,
-            name: name,
-            location: location,
-            coordinates: coordinates,
+            name,
+            location,
+            coordinates,
             price_level: price, 
             yelpRating: rating, 
-            image_url: image_url, 
-            display_phone: display_phone,
+            image_url, 
+            display_phone,
             yelpReviewCount: review_count,
-            alias: alias,
+            alias,
           })
           .then(createdShopDoc => {
             const userId = req.user._id;
             const ourShopId = createdShopDoc._id;
+            const yelpId = createdShopDoc.yelpId;
             // Once created, we get the local db id and add it to the list of favorites of our user. 
             return User.findByIdAndUpdate(
               userId,
-              { $push: { favorites: ourShopId } },
+              { $push: { favorites: ourShopId, yelpFavorites: yelpId } },
               { runValidators: true, new: true }
             )
             // then we send the userDoc to our front end 
@@ -160,6 +161,7 @@ router.put("/add-shop/:shopId", (req, res, next) => {
         } else {
           const userId = req.user._id;
           const localShopId = shopDoc._id;
+          const yelpId = shopDoc.yelpId;
         // We check if the user already has this restaurant in their favorites
           return User.findById(userId)
           .then(userDoc => {
@@ -168,7 +170,7 @@ router.put("/add-shop/:shopId", (req, res, next) => {
               console.log("findUser and check if localShopId is included", userDoc.favorites.indexOf(localShopId) === -1, localShopId, userDoc.favorites);
               User.findByIdAndUpdate(
                 userId, 
-                { $push: { favorites: localShopId } }, 
+                { $push: { favorites: localShopId, yelpFavorites: yelpId } }, 
                 { runValidators: true, new: true},
               )
                 .then(userDoc => res.json(userDoc))
