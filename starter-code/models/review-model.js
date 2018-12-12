@@ -34,7 +34,7 @@ cuisine: {
 },
 diet: {
   type: [String],
-  enum: ["Vegan", "Veggie", "Gluten free", "Paleo", "Dairy-free"],
+  enum: ["Vegan", "Veggie", "Gluten Free", "Paleo", "Dairy-free"],
   required: true
 },
 types: {
