@@ -10,6 +10,7 @@ const router = express.Router();
 router.get("/shop", (req, res, next) => {
   const dataToken = process.env.YELP_TOKEN;
   // if the user is not logged-in then we search for the best rated places in Paris
+  if (!req.user) {
   axios
     .get(
       `https://api.yelp.com/v3/businesses/search?limit=30&term=food&location=paris&sort_by=rating`,
@@ -20,15 +21,24 @@ router.get("/shop", (req, res, next) => {
       res.json(response.data);
     })
     .catch(err => next(err));
-
-  // if the user is logged-in then we used their coordinates
-  // const { latitude, longitude } = req.user; // double checker où se trouvent les infos dans le model
-  // axios.get(`https://api.yelp.com/v3/businesses/search?limit=30&latitude=${latitude}&longitude=${longitude}&radius=500&sort_by=rating`, { headers: { "Authorization": `Bearer ${dataToken}` } })
-  //   .then(response => {
-  //     console.log(response.data);
-  //     res.json(response.data);
-  //   })
-  //   .catch(err => next(err));
+    
+    // if the user is logged-in then we used their coordinates
+  } else {
+      User.findById(req.user._id)
+        .populate("companyId")
+        .then(userDoc => {
+          const latitude = userDoc.companyId.addressCoordinates.coordinates[1];
+          const longitude = userDoc.companyId.addressCoordinates.coordinates[0];
+            axios.get(`https://api.yelp.com/v3/businesses/search?limit=30&latitude=${latitude}&longitude=${longitude}&radius=500&sort_by=rating`, 
+            { headers: { "Authorization": `Bearer ${dataToken}` } })
+              .then(response => {
+                console.log(response.data);
+                res.json(response.data);
+              })
+              .catch(err => next(err));
+        })
+        .catch(err => next(err));
+      }
 });
 
 // GET "/shop/workmates" -- Retrieves the list of restaurants in the coworkers' favorites
@@ -44,7 +54,7 @@ router.get("/shop/:searchTerm", (req, res, next) => {
   const { searchTerm } = req.params; // ou possible de recup de req.query
   axios
     .get(
-      `https://api.yelp.com/v3/businesses/search?location=paris&term=${searchTerm}&limit=50`,
+      `https://api.yelp.com/v3/businesses/search?location=paris&term=${searchTerm}&limit=30`,
       { headers: { Authorization: `Bearer ${dataToken}` } }
     )
     .then(response => {
