@@ -7,7 +7,7 @@ const User = require("../models/user-model.js");
 const router = express.Router();
 
 // GET "/shop" -- Retrieves the list of resto sorted by closest distance
-router.get("/shop", (req, res, next) => {
+router.get("/shops", (req, res, next) => {
   const dataToken = process.env.YELP_TOKEN;
   // if the user is not logged-in then we search for the best rated places in Paris
   if (!req.user) {
@@ -17,11 +17,11 @@ router.get("/shop", (req, res, next) => {
       { headers: { Authorization: `Bearer ${dataToken}` } }
     )
     .then(response => {
-      //console.log(response.data);
+      console.log("response data of /shop without user id", response.data);
       res.json(response.data);
     })
     .catch(err => next(err));
-    
+
     // if the user is logged-in then we used their coordinates
   } else {
       User.findById(req.user._id)
@@ -32,7 +32,7 @@ router.get("/shop", (req, res, next) => {
             axios.get(`https://api.yelp.com/v3/businesses/search?limit=30&latitude=${latitude}&longitude=${longitude}&radius=500&sort_by=rating`, 
             { headers: { "Authorization": `Bearer ${dataToken}` } })
               .then(response => {
-                console.log(response.data);
+                console.log("response data of /shop with identified user", response.data);
                 res.json(response.data);
               })
               .catch(err => next(err));
@@ -47,18 +47,41 @@ router.get("/shop/workmates", (req, res, next) => {});
 
 // GET "/shop/area" -- Retrieves the list of restaurants in the area (coordinates)
 
-// GET "/shop/searchTerm" -- Retrieves the list of restaurants filtered by the user input (<RestaurantsList)
-router.get("/shop/:searchTerm", (req, res, next) => {
+// GET "/shop-search/searchTerm" -- Retrieves the list of restaurants filtered by the user input (<RestaurantsList)
+router.get("/shop-search/:searchTerm", (req, res, next) => {
+  const { searchTerm } = req.params; // ou possible de recup de req.query
+  console.log(searchTerm);
+  if (!searchTerm) {
+    searchTerm = "food";
+  }
   //console.log("req.params de searchTerm", req.params);
   const dataToken = process.env.YELP_TOKEN;
-  const { searchTerm } = req.params; // ou possible de recup de req.query
+  console.log("/shop-search/:searchTerm", searchTerm);
+
   axios
     .get(
       `https://api.yelp.com/v3/businesses/search?location=paris&term=${searchTerm}&limit=30`,
       { headers: { Authorization: `Bearer ${dataToken}` } }
     )
     .then(response => {
-      //console.log(response.data);
+      console.log("response data of /shop-search/:searchTerm", response.data);
+      res.json({ shop: response.data, user: req.user });
+    })
+    .catch(err => next(err));
+});
+
+// GET "/shop-search/" -- Retrieves the list of restaurants when the user didn't input anything (default "All Filters") (<RestaurantsList)
+router.get("/shop-search", (req, res, next) => {
+  
+  const dataToken = process.env.YELP_TOKEN;
+
+  axios
+    .get(
+      `https://api.yelp.com/v3/businesses/search?location=paris&term=food&limit=30`,
+      { headers: { Authorization: `Bearer ${dataToken}` } }
+    )
+    .then(response => {
+      console.log("response data of /shop-search/", response.data);
       res.json({ shop: response.data, user: req.user });
     })
     .catch(err => next(err));
