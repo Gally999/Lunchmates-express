@@ -1,5 +1,6 @@
 const express = require("express");
 const Shop = require("../models/shop-model.js");
+const User = require("../models/user-model.js");
 const Review = require("../models/review-model.js");
 const axios = require("axios");
 
@@ -42,7 +43,6 @@ router.post("/shop-details/:shopId", (req, res, next) => {
       } = response.data;
       Shop.findOne({ yelpId: { $eq: id } })
         .then(shopDoc => {
-          console.log("whatever", shopDoc);
           // Check if shop already exists in our local database
           if (!shopDoc) {
             // If the shop doesn't exist, we create it
@@ -58,7 +58,6 @@ router.post("/shop-details/:shopId", (req, res, next) => {
               yelpReviewCount: review_count,
               alias: alias
             }).then(createdShopDoc => {
-              console.log("works on line 57!!!!", createdShopDoc);
               const userId = req.user._id;
               const ourShopId = createdShopDoc._id;
 
@@ -131,7 +130,7 @@ router.post("/shop-details/:shopId", (req, res, next) => {
 });
 
 // GET "/review/workmates" -- Retrieve review list of workmates (populate by companyID)
-router.get("/reviews", (req, res, next) => {
+router.get("/reviews-workmates", (req, res, next) => {
   const { companyId } = req.user;
 
   User.find({ companyId, _id: { $ne: req.user._id } }).then(
@@ -141,6 +140,8 @@ router.get("/reviews", (req, res, next) => {
       });
       Review.find({ userId: coworkersId })
         .sort({ createdAt: -1 })
+        .limit(3)
+        .populate('userId')
         .then(reviewsResults => {
           res.json(reviewsResults);
         })
