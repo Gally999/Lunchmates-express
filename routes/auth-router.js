@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const ObjectId = require("mongoose").ObjectId;
 
 const User = require("../models/user-model.js");
 
@@ -8,7 +9,8 @@ const router = express.Router();
 // POST "/signup"
 router.post("/signup", (req, res, next) => {
   const { firstName, lastName, email, originalPassword, companyId } = req.body;
-  console.log(firstName, lastName, email, originalPassword, companyId)
+  //console.log(firstName, lastName, email, originalPassword, companyId)
+  companyId = ObjectId(companyId);
 
   const encryptedPassword = bcrypt.hashSync(originalPassword, 10);
 
