@@ -9,6 +9,10 @@ const router = express.Router();
 // ADD THE SORT BY CLOSEST
 router.get("/reviews", (req, res, next) => {
   Review.find()
+    .sort({ createdAt: -1 })
+    .limit(3)
+    .populate('userId')
+    // .populate('companyId')
     .then(reviewsResults => res.json(reviewsResults))
     .catch(err => next(err));
 });
@@ -152,12 +156,12 @@ router.get("/review/:shop", (req, res, next) => {
   console.log("blah", shop);
   Shop.findOne({ yelpId: { $eq: shop } })
     .then(shopDoc => {
-      Review.find({ shopId: { $eq: shopDoc._id }})
+      Review.find({ shopId: { $eq: shopDoc._id } })
         .populate("userId")
         .then(reviewsResults => {
-          res.json(reviewsResults)
+          res.json(reviewsResults);
         })
-        .catch(err => next(err))
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });
