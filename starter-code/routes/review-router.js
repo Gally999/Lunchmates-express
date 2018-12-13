@@ -54,7 +54,7 @@ router.post("/shop-details/:shopId", (req, res, next) => {
               yelpReviewCount: review_count,
               alias: alias
             }).then(createdShopDoc => {
-              console.log("works on line 57!!!!", createdShopDoc)
+              console.log("works on line 57!!!!", createdShopDoc);
               const userId = req.user._id;
               const ourShopId = createdShopDoc._id;
 
@@ -145,11 +145,20 @@ router.get("/reviews", (req, res, next) => {
   );
 });
 
-// GET "/review/:restoId" -- Retrives review list of 1 resto (find shopId in the URL)
-router.get("/reviews", (req, res, next) => {
-  const { shopId } = req.params;
-  Review.find(shopId)
-    .then(reviewsResults => res.json(reviewsResults))
+// GET "/review/:shopId" -- Retrives review list of 1 resto (find shopId in the URL)
+router.get("/review/:shop", (req, res, next) => {
+  console.log("req.PARAMS", req.params);
+  const { shop } = req.params;
+  console.log("blah", shop);
+  Shop.findOne({ yelpId: { $eq: shop } })
+    .then(shopDoc => {
+      Review.find({ shopId: { $eq: shopDoc._id }})
+        .populate("userId")
+        .then(reviewsResults => {
+          res.json(reviewsResults)
+        })
+        .catch(err => next(err))
+    })
     .catch(err => next(err));
 });
 
