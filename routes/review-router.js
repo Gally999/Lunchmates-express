@@ -140,8 +140,9 @@ router.get("/reviews-workmates", (req, res, next) => {
       });
       Review.find({ userId: coworkersId })
         .sort({ createdAt: -1 })
+        .populate("userId")
+        .populate("shopId")
         .limit(3)
-        .populate('userId')
         .then(reviewsResults => {
           res.json(reviewsResults);
         })
@@ -170,5 +171,17 @@ router.get("/review/:shop", (req, res, next) => {
     })
     .catch(err => next(err));
 });
+
+
+// GET "/review/:userId" -- Retrieves the reviews of the user
+router.get("/review-user", (req, res, next) => {
+  const userId = req.user._id;
+  Review.find({ userId: { $eq: userId } })
+    .then(reviewResults => {
+      console.log("reviewResults", reviewResults)
+      res.json(reviewResults);
+    })
+    .catch(err => next(err));
+})
 
 module.exports = router;
