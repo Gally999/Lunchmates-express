@@ -17,7 +17,6 @@ router.get("/shops", (req, res, next) => {
       { headers: { Authorization: `Bearer ${dataToken}` } }
     )
     .then(response => {
-      console.log("response data of /shop without user id", response.data);
       res.json(response.data);
     })
     .catch(err => next(err));
@@ -32,7 +31,6 @@ router.get("/shops", (req, res, next) => {
             axios.get(`https://api.yelp.com/v3/businesses/search?limit=20&latitude=${latitude}&longitude=${longitude}&radius=500&sort_by=rating`, 
             { headers: { "Authorization": `Bearer ${dataToken}` } })
               .then(response => {
-                console.log("response data of /shop with identified user", response.data);
                 res.json(response.data);
               })
               .catch(err => next(err));
@@ -64,7 +62,6 @@ router.get("/shop-search/:searchTerm", (req, res, next) => {
       { headers: { Authorization: `Bearer ${dataToken}` } }
     )
     .then(response => {
-      console.log("response data of /shop-search/:searchTerm", response.data);
       res.json({ shop: response.data, user: req.user });
     })
     .catch(err => next(err));
@@ -81,7 +78,6 @@ router.get("/shop-search", (req, res, next) => {
       { headers: { Authorization: `Bearer ${dataToken}` } }
     )
     .then(response => {
-      console.log("response data of /shop-search/", response.data);
       res.json({ shop: response.data, user: req.user });
     })
     .catch(err => next(err));
@@ -153,7 +149,6 @@ router.put("/add-shop/:shopId", (req, res, next) => {
       // We create a copy of the API in our local database
       Shop.findOne({ yelpId: {$eq: id }} )
       .then(shopDoc => {
-        console.log("whatever", shopDoc);
         // Check if shop already exists in our local database
         if (!shopDoc) {
           // If the shop doesn't exist, we create it
@@ -200,7 +195,6 @@ router.put("/add-shop/:shopId", (req, res, next) => {
           .then(userDoc => {
             // If they don't already have it as a favorite, then we push it to the favorites array
             if (userDoc.favorites.indexOf(localShopId) === -1) {
-              console.log("findUser and check if localShopId is included", userDoc.favorites.indexOf(localShopId) === -1, localShopId, userDoc.favorites);
               User.findByIdAndUpdate(
                 userId, 
                 { $push: { favorites: localShopId, yelpFavorites: yelpId } }, 

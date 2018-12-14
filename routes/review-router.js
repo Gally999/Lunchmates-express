@@ -10,7 +10,10 @@ const router = express.Router();
 // ADD THE SORT BY CLOSEST
 router.get("/reviews", (req, res, next) => {
   Review.find()
-    .populate("userId")
+    .sort({ createdAt: -1 })
+    .limit(3)
+    .populate('userId')
+    // .populate('companyId')
     .then(reviewsResults => res.json(reviewsResults))
     .catch(err => next(err));
 });
@@ -40,7 +43,6 @@ router.post("/shop-details/:shopId", (req, res, next) => {
       } = response.data;
       Shop.findOne({ yelpId: { $eq: id } })
         .then(shopDoc => {
-          console.log("whatever", shopDoc);
           // Check if shop already exists in our local database
           if (!shopDoc) {
             // If the shop doesn't exist, we create it
@@ -56,7 +58,6 @@ router.post("/shop-details/:shopId", (req, res, next) => {
               yelpReviewCount: review_count,
               alias: alias
             }).then(createdShopDoc => {
-              console.log("works on line 57!!!!", createdShopDoc);
               const userId = req.user._id;
               const ourShopId = createdShopDoc._id;
 
@@ -164,9 +165,9 @@ router.get("/review/:shop", (req, res, next) => {
       Review.find({ shopId: { $eq: shopDoc._id }})
         .populate("userId")
         .then(reviewsResults => {
-          res.json(reviewsResults)
+          res.json(reviewsResults);
         })
-        .catch(err => next(err))
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });
