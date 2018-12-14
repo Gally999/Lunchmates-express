@@ -58,8 +58,12 @@ router.delete("/logout", (req, res, next) => {
 router.get("/checkuser", (req, res, next) => {
   if(req.user) {
     //console.log("checkuser req.user", req.user);
-    req.user.encryptedPassword = undefined;
-    res.json({ userDoc: req.user });
+    User.findById(req.user._id)
+    .populate('companyId')
+    .then(userDoc => {
+      userDoc.encryptedPassword = undefined;
+      res.json({ userDoc });
+    })
   } else {
     res.json({ userDoc: null });
   }
