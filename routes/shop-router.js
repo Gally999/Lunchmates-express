@@ -13,7 +13,7 @@ router.get("/shops", (req, res, next) => {
   if (!req.user) {
   axios
     .get(
-      `https://api.yelp.com/v3/businesses/search?limit=30&term=food&location=paris&sort_by=rating`,
+      `https://api.yelp.com/v3/businesses/search?limit=20&term=food&location=paris&sort_by=rating`,
       { headers: { Authorization: `Bearer ${dataToken}` } }
     )
     .then(response => {
@@ -29,7 +29,7 @@ router.get("/shops", (req, res, next) => {
         .then(userDoc => {
           const latitude = userDoc.companyId.addressCoordinates.coordinates[1];
           const longitude = userDoc.companyId.addressCoordinates.coordinates[0];
-            axios.get(`https://api.yelp.com/v3/businesses/search?limit=30&latitude=${latitude}&longitude=${longitude}&radius=500&sort_by=rating`, 
+            axios.get(`https://api.yelp.com/v3/businesses/search?limit=20&latitude=${latitude}&longitude=${longitude}&radius=500&sort_by=rating`, 
             { headers: { "Authorization": `Bearer ${dataToken}` } })
               .then(response => {
                 console.log("response data of /shop with identified user", response.data);
@@ -60,7 +60,7 @@ router.get("/shop-search/:searchTerm", (req, res, next) => {
 
   axios
     .get(
-      `https://api.yelp.com/v3/businesses/search?location=paris&term=${searchTerm}&limit=30`,
+      `https://api.yelp.com/v3/businesses/search?location=paris&term=${searchTerm}&limit=20`,
       { headers: { Authorization: `Bearer ${dataToken}` } }
     )
     .then(response => {
@@ -77,7 +77,7 @@ router.get("/shop-search", (req, res, next) => {
 
   axios
     .get(
-      `https://api.yelp.com/v3/businesses/search?location=paris&term=food&limit=30`,
+      `https://api.yelp.com/v3/businesses/search?location=paris&term=food&limit=20`,
       { headers: { Authorization: `Bearer ${dataToken}` } }
     )
     .then(response => {

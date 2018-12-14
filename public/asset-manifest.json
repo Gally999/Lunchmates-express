@@ -1,14 +1,14 @@
 {
-  "main.css": "/static/css/main.ccc8cda0.chunk.css",
-  "main.js": "/static/js/main.9f76206f.chunk.js",
-  "main.js.map": "/static/js/main.9f76206f.chunk.js.map",
-  "static/js/1.7fe70cb0.chunk.js": "/static/js/1.7fe70cb0.chunk.js",
-  "static/js/1.7fe70cb0.chunk.js.map": "/static/js/1.7fe70cb0.chunk.js.map",
+  "main.css": "/static/css/main.b4bfa526.chunk.css",
+  "main.js": "/static/js/main.7e1ca687.chunk.js",
+  "main.js.map": "/static/js/main.7e1ca687.chunk.js.map",
+  "static/js/1.325b59ef.chunk.js": "/static/js/1.325b59ef.chunk.js",
+  "static/js/1.325b59ef.chunk.js.map": "/static/js/1.325b59ef.chunk.js.map",
   "runtime~main.js": "/static/js/runtime~main.229c360f.js",
   "runtime~main.js.map": "/static/js/runtime~main.229c360f.js.map",
   "static/media/HomePage.css": "/static/media/buffet-chicken-cooking-5938 (1).f2f493ec.jpg",
-  "static/css/main.ccc8cda0.chunk.css.map": "/static/css/main.ccc8cda0.chunk.css.map",
+  "static/css/main.b4bfa526.chunk.css.map": "/static/css/main.b4bfa526.chunk.css.map",
   "index.html": "/index.html",
-  "precache-manifest.6aa73a709882db52047324f8c5ef7615.js": "/precache-manifest.6aa73a709882db52047324f8c5ef7615.js",
+  "precache-manifest.03f0c07053c0ebbbf82b93f3b4ecbc6f.js": "/precache-manifest.03f0c07053c0ebbbf82b93f3b4ecbc6f.js",
   "service-worker.js": "/service-worker.js"
 }
