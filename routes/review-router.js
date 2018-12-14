@@ -1,5 +1,6 @@
 const express = require("express");
 const Shop = require("../models/shop-model.js");
+const User = require("../models/user-model.js");
 const Review = require("../models/review-model.js");
 const axios = require("axios");
 
@@ -9,6 +10,7 @@ const router = express.Router();
 // ADD THE SORT BY CLOSEST
 router.get("/reviews", (req, res, next) => {
   Review.find()
+    .populate("userId")
     .then(reviewsResults => res.json(reviewsResults))
     .catch(err => next(err));
 });
@@ -127,7 +129,7 @@ router.post("/shop-details/:shopId", (req, res, next) => {
 });
 
 // GET "/review/workmates" -- Retrieve review list of workmates (populate by companyID)
-router.get("/reviews", (req, res, next) => {
+router.get("/reviews-workmates", (req, res, next) => {
   const { companyId } = req.user;
 
   User.find({ companyId, _id: { $ne: req.user._id } }).then(
@@ -137,6 +139,9 @@ router.get("/reviews", (req, res, next) => {
       });
       Review.find({ userId: coworkersId })
         .sort({ createdAt: -1 })
+        .populate("userId")
+        .populate("shopId")
+        .limit(3)
         .then(reviewsResults => {
           res.json(reviewsResults);
         })
@@ -165,5 +170,17 @@ router.get("/review/:shop", (req, res, next) => {
     })
     .catch(err => next(err));
 });
+
+
+// GET "/review/:userId" -- Retrieves the reviews of the user
+router.get("/review-user", (req, res, next) => {
+  const userId = req.user._id;
+  Review.find({ userId: { $eq: userId } })
+    .then(reviewResults => {
+      console.log("reviewResults", reviewResults)
+      res.json(reviewResults);
+    })
+    .catch(err => next(err));
+})
 
 module.exports = router;
