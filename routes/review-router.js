@@ -157,7 +157,11 @@ router.get("/review/:shop", (req, res, next) => {
   console.log("blah", shop);
   Shop.findOne({ yelpId: { $eq: shop } })
     .then(shopDoc => {
-      Review.find({ shopId: { $eq: shopDoc._id } })
+      if (!shopDoc) {
+        res.json([]);
+        return; 
+      }
+      Review.find({ shopId: { $eq: shopDoc._id }})
         .populate("userId")
         .then(reviewsResults => {
           res.json(reviewsResults);
